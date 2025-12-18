@@ -1,0 +1,92 @@
+.tdw small {
+	font-size: 70%;
+}
+
+.tdw-ajax-loading {
+	opacity: 0.5;
+}
+#tdw-form-add p.tdw-float-left {
+	float: left;
+	margin-top: 0px;
+	margin-right: 0.75em;
+}
+#tdw-form-add input[type=number] {
+	width: 60px;
+}
+#tdw-form-edit input[type=number] {
+	width: 50px;
+}
+.tdw-date-field,
+#tdw-form-advanced-id {
+	width: 100px;
+}
+#tdw-form-edit .tdw-date-field,
+input[name=tdw-form-edit-advanced-id] {
+	width: 85px;
+}
+.tdw-time-field {
+	width: 75px;
+}
+#tdw-form-edit .tdw-time-field {
+	width: 65px;
+}
+#tdw-form-edit input,
+#tdw-form-edit select {
+	font-size: 12px;
+}
+#tdw-form-edit input {
+	padding: 0 4px;
+	min-height: 22px;
+}
+#tdw-form-edit input[type=checkbox] {
+	min-height: auto;
+}
+#tdw-form-edit select {
+	min-height: 22px;
+}
+#tdw-form-edit input.button-primary {
+	padding: 0 8px;
+}
+#tdw-form-add-2,
+#tdw-form-add-3 {
+	float: left;
+}
+.tdw-hidden {
+	display: none;
+}
+#tdw-rules-table {
+	margin-top: 3em;
+	margin-bottom: 3em;
+}
+#tdw-rules-table table tbody tr td {
+	border-top: 1px solid #e1e1e1;
+}
+#tdw-rules-table table tbody tr:first-child td,
+#tdw-rules-table table tbody tr.tdw-edit-rule td {
+	border-top: 0px;
+}
+#tdw-form-edit-role {
+	max-width: 125px;
+}
+#tdw-form-edit .widefat th {
+	font-size: 13px;
+}
+#tdw-form-edit .widefat td {
+	font-size: 12px;
+}
+#tdw-form-edit .widefat tr.tdw-editing-active {
+	display: table-row !important;
+}
+#tdw-form-edit .widefat tr.tdw-editing-active td {
+	background-color: #f6f7f7;
+}
+
+#tdw-proaddon-features ul {
+	list-style-type: disc;
+	padding-left: 1.5em;
+}
+
+.form-invalid input,
+.form-invalid select {
+	border:  1px solid red;
+}
