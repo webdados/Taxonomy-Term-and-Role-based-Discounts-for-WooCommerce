@@ -5,6 +5,7 @@ __MACOSX
 # Tooling files
 .git/*
 .github/*
+.wordpress-org/*
 .svn/*
 .distignore
 .gitignore
@@ -23,3 +24,4 @@ createzip.command
 
 # Other files specific to the plugin
 _todo.txt
+README.md
