@@ -901,6 +901,12 @@ class WC_Taxonomy_Discounts_Webdados {
 			$cart_item_keys_variations = array();
 			if ( count( $discount_rules ) ) {
 				foreach ( $cart->cart_contents as $cart_item_key => $cart_item ) {
+					// Shop as Client Cart Price Changer compatibility - Set custom price, skip our calculations
+					if ( isset( $cart_item['sac_custom_price_to_set'] ) ) {
+						WC()->cart->cart_contents[ $cart_item_key ]['data']->set_price( $cart_item['sac_custom_price_to_set'] );
+						continue;
+					}
+					// Go on
 					$applied_rule = false;
 					$_product     = $cart->cart_contents[ $cart_item_key ]['data'];
 
