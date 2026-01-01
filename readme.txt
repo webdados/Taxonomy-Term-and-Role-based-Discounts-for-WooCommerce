@@ -5,7 +5,7 @@ Tags: deals, sales, marketing, dynamic, pricing
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 7.0
+Stable tag: 7.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -152,12 +152,13 @@ You can report any security bugs found in the source code of this plugin through
 
 == Changelog ==
 
-= 7.0 - 2026-01-01 =
+= 7.1 - 2026-01-01 =
 * [NEW] [PRO add-on](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/?utm_source=wordpress.org&utm_medium=link&utm_campaign=taxonomydiscounts_woocommerce_plugin) 5.0: Show discount information for non-taxonomy discounts (set by product sale price), including start and end date, allowing compliance with legislation, such as the Portuguese law, which requires these details to be displayed next to the sale price - [Start date will be available on WooCommerce 10.5.0](https://github.com/woocommerce/woocommerce/issues/62130#issuecomment-3657559585)
 * [NEW] Improve compatibility with [Shop as Client for WooCommerce](https://nakedcatplugins.com/product/shop-as-client-for-woocommerce-pro-add-on/) for WooCommerce: allow changing the cart item price even if a taxonomy discount is applied to it
 * [DEV] Allow PRO add-on to filter discount information even when empty, thus allowing showing discount information for non-taxonomy discounts
 * [DEV] Remove `load_plugin_textdomain` call as it’s no longer needed
 * [DEV] Allow PRO add-on to integrate with [Google Product Feed for WooCommerce](https://automattic.pxf.io/EEJQd4)
+* [DEV] Fix plugin version tag
 * [DEV] Tested up to WordPress 7.0-alpha-61379 and WooCommerce 10.4.2
 
 = 6.2 - 2025-11-28 =
