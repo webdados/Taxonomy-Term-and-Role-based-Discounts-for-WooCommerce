@@ -3,9 +3,9 @@ Contributors: nakedcatplugins, webdados
 Donate link: https://www.paypal.me/Wonderm00n
 Tags: deals, sales, marketing, dynamic, pricing
 Requires at least: 5.8
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 7.1
+Stable tag: 7.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -151,6 +151,10 @@ You can report any security bugs found in the source code of this plugin through
 5. Show discount information, including dates on the product page (available with the PRO add-on)
 
 == Changelog ==
+
+= 7.2 - 2026-03-61 =
+* [NEW] [PRO add-on](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/?utm_source=wordpress.org&utm_medium=link&utm_campaign=taxonomydiscounts_woocommerce_plugin) 5.1: Improve GitHub Actions and Updater
+* [DEV] Tested with WordPress 7.0-beta3-61865 and WooCommerce 10.6.0-beta.2
 
 = 7.1 - 2026-01-01 =
 * [NEW] [PRO add-on](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/?utm_source=wordpress.org&utm_medium=link&utm_campaign=taxonomydiscounts_woocommerce_plugin) 5.0: Show discount information for non-taxonomy discounts (set by product sale price), including start and end date, allowing compliance with legislation, such as the Portuguese law, which requires these details to be displayed next to the sale price - [Start date will be available on WooCommerce 10.5.0](https://github.com/woocommerce/woocommerce/issues/62130#issuecomment-3657559585)
