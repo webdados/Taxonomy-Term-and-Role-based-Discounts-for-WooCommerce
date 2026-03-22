@@ -1223,9 +1223,6 @@ class WC_Taxonomy_Discounts_Webdados {
 															// Normal
 															$discount_price         = $base_price;
 															$discount_display_price = $display_price;
-															// Discount - We're assuming it's only percentage!!
-															// MISSING - FIX FOR AGGREFATE VARIATIONS FOR OTHER TYPES OF DISCOUNTS - PRO SHOULD HANDLE THIS
-															
 															switch ( $rule['type'] ) {
 																case 'percentage':
 																	$discount_price         = $base_price - ( $base_price * ( floatval( $rule['value'] ) / 100 ) );
@@ -1571,9 +1568,9 @@ class WC_Taxonomy_Discounts_Webdados {
 			if ( $this->debug ) {
 				do_action( 'qm/lap', 'WC_Taxonomy_Discounts_Webdados::on_get_product_is_on_sale - ' . $product->get_id() );
 			}
-			$regular_price = wc_format_decimal( $product->get_regular_price(), wc_get_price_decimals() );
+			$regular_price               = wc_format_decimal( $product->get_regular_price(), wc_get_price_decimals() );
 			$product_to_get_applied_rule = ( $product->is_type( 'variation' ) ? wc_get_product( $product->get_parent_id() ) : $product );
-			$applied_rule  = self::get_product_applied_rule( $product_to_get_applied_rule ); // Here we need to get the applied rule for the parent, if a variation
+			$applied_rule                = self::get_product_applied_rule( $product_to_get_applied_rule ); // Here we need to get the applied rule for the parent, if a variation
 			if (
 				( empty( $regular_price ) || empty( $discount_price ) )
 				&&
@@ -1687,7 +1684,7 @@ class WC_Taxonomy_Discounts_Webdados {
 						}
 						break;
 					default:
-						// Missing PRO integration
+						// Non default rule types - Allow PRO or custom code to set the information text through filters
 						$info = apply_filters( 'tdw_discount_information_non_default_rule', '', $product, $rule, $location );
 						break;
 				}
