@@ -35,7 +35,7 @@ Allows you to set a start and end date for each discount.
 = Get more with the PRO add-on =
 
 * “Discount Tag” custom taxonomy if you don’t want to use Categories, Tags, or any other existing product taxonomy;
-* Sitewide discounts (applied to all the store products)
+* Sitewide discounts: any discount type applied to all the store products, instead of just one taxonomy term
 * Set the maximum amount of free items when using BOGO discounts;
 * Replace the sale badge with a discount percentage;
 * Replace the sale badge with a discount percentage, even if the discount is not set by a taxonomy but rather by setting a sale price on the product (in beta);
@@ -157,6 +157,7 @@ You can report any security bugs found in the source code of this plugin through
 * [NEW] [PRO add-on](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/?utm_source=wordpress.org&utm_medium=link&utm_campaign=taxonomydiscounts_woocommerce_plugin) 8.0: FIXED -> MISSING!!!!!!!!!!!!!!!!!!!!!
 * [NEW] [PRO add-on](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/?utm_source=wordpress.org&utm_medium=link&utm_campaign=taxonomydiscounts_woocommerce_plugin) 8.0: Log and show the last user that edited a rule
 * [TWEAK] Show helper for the “Aggregate variations” field
+* [TWEAK] Link to each term public archive in the rules table
 * [FIX] Subtotal on classic cart was not correct in some scenarios
 * [FIX] Discount would not show up for products already in cart in some scenarios
 * [FIX] Several fixes regarding variations

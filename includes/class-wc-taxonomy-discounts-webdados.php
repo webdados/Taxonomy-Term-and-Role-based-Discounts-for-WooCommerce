@@ -2166,8 +2166,14 @@ class WC_Taxonomy_Discounts_Webdados {
 											echo esc_html( $taxonomy_name );
 											do_action( 'tdw_admin_after_taxonomy_name', $rule['taxonomy'], $taxonomy );
 											if ( $taxonomy ) {
-
-												echo ' / <strong>' . esc_html( $term->name ) . '</strong> <small title="' . esc_attr__( 'Number of terms in this taxonomy', 'taxonomy-discounts-woocommerce' ) . '">(' . intval( $term->count ) . ')</small>';
+												$term_name = trim( $term->name );
+												if ( $taxonomy->public || $taxonomy->publicly_queryable ) {
+													$term_link = get_term_link( $term );
+													if ( ! is_wp_error( $term_link ) ) {
+														$term_name = '<a href="' . esc_url( $term_link ) . '" target="_blank">' . esc_html( $term_name ) . '</a>';
+													}
+												}
+												echo ' / <strong>' . wp_kses_post( $term_name ) . '</strong> <small title="' . esc_attr__( 'Number of terms in this taxonomy', 'taxonomy-discounts-woocommerce' ) . '">(' . intval( $term->count ) . ')</small>';
 											}
 											?>
 											<div class="row-actions">
