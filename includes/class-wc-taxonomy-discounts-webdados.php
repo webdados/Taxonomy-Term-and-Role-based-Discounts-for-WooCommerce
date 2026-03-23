@@ -2507,9 +2507,20 @@ class WC_Taxonomy_Discounts_Webdados {
 					) {
 						$data['advanced_id'] = isset( $_POST['tdw-form-advanced-id'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['tdw-form-advanced-id'] ) ) ) : '';
 					}
-					if ( intval( $_POST['tdw-form-add-term'] ) > 0 ) {
-						$data = apply_filters( 'tdw_form_add_data_before_save', $data, $_POST ); // Let pro or others manipulate the final data
+					$data = apply_filters( 'tdw_form_add_data_before_save', $data, $_POST ); // Let pro or others manipulate the final data
+					// This is where we should check for integer or array of integers and add to several termns at the same time
+					// The interface should only be implemented on the PRO Add-on, but the logic needs to be here
+					// See: https://github.com/webdados/Taxonomy-Term-and-Role-based-Discounts-for-WooCommerce---PRO-add-on/issues/12
+					if ( ( ! is_array( $_POST['tdw-form-add-term'] ) ) && intval( $_POST['tdw-form-add-term'] ) > 0 ) {
+						// Default: save to one term
 						add_term_meta( intval( $_POST['tdw-form-add-term'] ), $this->discount_rule_meta_key, $data );
+					} elseif ( is_array( $_POST['tdw-form-add-term'] ) ) {
+						// If an array of terms is sent, we loop through it and add the rule to each term - From PRO Add-on
+						foreach ( $_POST['tdw-form-add-term'] as $term_id ) {
+							if ( intval( $term_id ) > 0 ) {
+								add_term_meta( intval( $term_id ), $this->discount_rule_meta_key, $data );
+							}
+						}
 					}
 					do_action( 'tdw_rule_add', intval( $_POST['tdw-form-add-term'] ), $data['taxonomy'], $data );
 					echo '1';
