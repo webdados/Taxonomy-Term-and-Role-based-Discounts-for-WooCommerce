@@ -2508,6 +2508,7 @@ class WC_Taxonomy_Discounts_Webdados {
 						$data['advanced_id'] = isset( $_POST['tdw-form-advanced-id'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['tdw-form-advanced-id'] ) ) ) : '';
 					}
 					if ( intval( $_POST['tdw-form-add-term'] ) > 0 ) {
+						$data = apply_filters( 'tdw_form_add_data_before_save', $data, $_POST ); // Let pro or others manipulate the final data
 						add_term_meta( intval( $_POST['tdw-form-add-term'] ), $this->discount_rule_meta_key, $data );
 					}
 					do_action( 'tdw_rule_add', intval( $_POST['tdw-form-add-term'] ), $data['taxonomy'], $data );
@@ -2594,6 +2595,7 @@ class WC_Taxonomy_Discounts_Webdados {
 					$data['advanced_id'] = isset( $_POST['tdw-form-edit-advanced-id'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['tdw-form-edit-advanced-id'] ) ) ) : '';
 				}
 				if ( $results && isset( $_POST['tdw-form-edit-term'] ) && intval( $_POST['tdw-form-edit-term'] ) > 0 && isset( $_POST['meta_id'] ) && intval( $_POST['meta_id'] ) > 0 ) {
+					$data = apply_filters( 'tdw_form_edit_data_before_save', $data, $_POST ); // Let pro or others manipulate the final data
 					update_term_meta( intval( $_POST['tdw-form-edit-term'] ), $this->discount_rule_meta_key, $data, $old_data );
 				}
 				do_action( 'tdw_rule_edit', intval( $_POST['tdw-form-edit-term'] ), $data['taxonomy'], $data, $old_data );
