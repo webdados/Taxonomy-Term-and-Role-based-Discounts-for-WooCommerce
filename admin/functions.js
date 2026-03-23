@@ -5,9 +5,12 @@
 jQuery( document ).ready(
 	function ($) {
 
-		function tdw_reset_form_add(complete) {
-			if (complete) {
+		function tdw_reset_form_add( complete ) {
+			if ( complete ) {
 				$( '#tdw-form-add-taxonomy' ).val( '' );
+				$( '#tdw-form-add' ).find( 'select' ).each( function() {
+					$( this ).val( $( this ).find( 'option:first' ).val() );
+				} );
 			}
 			$( '.tdw-edit-rule' ).hide();
 			$( '#tdw-form-add-choose-term' ).html( '' );
@@ -20,9 +23,14 @@ jQuery( document ).ready(
 			$( '#tdw-form-add' ).removeClass( 'tdw-ajax-loading' );
 			// Really reset
 			$( '#tdw-form-add' ).find( 'input[type=text], input[type=number], textarea' ).val( '' );
+			$( '#tdw-form-add' ).find( 'input[type=checkbox]' ).prop( 'checked', false );
+			// Special cases
+			$( '#tdw-form-add-role' ).val( '_all_users_' );
 			$( '#tdw-form-add-type' ).val( '' );
 			$( '#tdw-form-add-disable-coupon' ).val( '1' );
 			$( '#tdw-form-add-active' ).val( '1' );
+			// Pro
+			$( '#tdw-form-pro-exclude-sale-products' ).val( '0' );
 		}
 
 		// Add form - Choose Taxonomy
@@ -59,7 +67,10 @@ jQuery( document ).ready(
 
 		function tdw_form_add_term() {
 			$( '#tdw-form-add' ).addClass( 'tdw-ajax-loading' );
-			if ( $( '#tdw-form-add-term' ).val() === '' ) {
+			console.log(  $( '#tdw-form-add-term' ).val() );
+			console.log(  $( '#tdw-form-add-term' ).val().length );
+			var add_term_val = [].concat( $( '#tdw-form-add-term' ).val() || [] );
+			if ( ! add_term_val.filter( v => v !== '' ).length ) {
 				$( '#tdw-form-add-div-2' ).hide();
 				$( '#tdw-form-add-div-3' ).hide();
 				$( '#tdw-form-add-div-4' ).hide();
@@ -115,11 +126,12 @@ jQuery( document ).ready(
 			'submit',
 			'#tdw-form-add',
 			function () {
+				var add_term_val = [].concat( $( '#tdw-form-add-term' ).val() || [] );
 				$( '#tdw-form-add .form-invalid' ).removeClass( 'form-invalid' );
 				if (
 				$( '#tdw-form-add-taxonomy' ).val() != ''
 				&&
-				$( '#tdw-form-add-term' ).val() != ''
+				add_term_val.filter( v => v !== '' ).length
 				&&
 				$( '#tdw-form-add-priority' ).val() > 0
 				&&
@@ -161,12 +173,12 @@ jQuery( document ).ready(
 								}
 								break;
 						}
-						if (go) {
+						if ( go ) {
 							$( '#tdw-form-add' ).addClass( 'tdw-ajax-loading' );
 							$.post(
 								ajaxurl,
 								$( '#tdw-form-add' ).serialize() + '&action=tdw_form_add_submit&nonce=' + $( '#tdw-form-add #_wpnonce' ).val(),
-								function (response) {
+								function ( response ) {
 									if ( response == '1' ) {
 										// Clear form
 										tdw_reset_form_add( true );
