@@ -67,8 +67,6 @@ jQuery( document ).ready(
 
 		function tdw_form_add_term() {
 			$( '#tdw-form-add' ).addClass( 'tdw-ajax-loading' );
-			console.log(  $( '#tdw-form-add-term' ).val() );
-			console.log(  $( '#tdw-form-add-term' ).val().length );
 			var add_term_val = [].concat( $( '#tdw-form-add-term' ).val() || [] );
 			if ( ! add_term_val.filter( v => v !== '' ).length ) {
 				$( '#tdw-form-add-div-2' ).hide();

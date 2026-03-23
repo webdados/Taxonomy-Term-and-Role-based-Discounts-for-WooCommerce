@@ -2435,7 +2435,12 @@ class WC_Taxonomy_Discounts_Webdados {
 						)
 					);
 					// Not escaped because wp_dropdown_categories does not need it (and it fails with wp_kses_post)
-					echo trim( $terms ) !== '' ? trim( $terms ) : esc_html__( 'No terms available', 'taxonomy-discounts-woocommerce' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					if ( trim( $terms ) !== '' ) {
+						echo $terms; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						do_action( 'tdw_admin_after_add_terms_dropdown' );
+					} else {
+						esc_html_e( 'No terms available', 'taxonomy-discounts-woocommerce' );
+					}
 				} else {
 					?>
 					<!-- No taxonomy -->
@@ -2444,7 +2449,6 @@ class WC_Taxonomy_Discounts_Webdados {
 					esc_html_e( 'N/A', 'taxonomy-discounts-woocommerce' );
 				}
 				?>
-
 			<?php
 			wp_die();
 			// phpcs:enable WordPress.Security.NonceVerification.Missing
