@@ -103,6 +103,7 @@ jQuery( document ).ready(
 					$( '#tdw-form-add-choose-submit' ).hide();
 				} else {
 					$( '#tdw-form-add-choose-type-' + $( '#tdw-form-add-type' ).val() ).show();
+					$( '#tdw-form-add-choose-type-description-' + $( '#tdw-form-add-type' ).val() ).show();
 					$( '[class*="tdw-form-add-choose-hide-"]' ).show();
 					$( '.tdw-form-add-choose-hide-' + $( '#tdw-form-add-type' ).val() ).hide();
 					$( '#tdw-form-add-div-3' ).show();

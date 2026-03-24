@@ -456,6 +456,31 @@ class WC_Taxonomy_Discounts_Webdados {
 	}
 
 	/**
+	 * Get human-readable description for a discount rule type
+	 *
+	 * @param string $type       The rule type identifier (e.g., 'percentage', 'x-for-y').
+	 * @param bool   $strip_tags Whether to strip HTML tags from the description (default: false).
+	 * @return string      The translated human-readable description for the rule type.
+	 */
+	public function get_rule_type_description( $type, $strip_tags = false ) {
+		switch ( $type ) {
+			case 'percentage':
+				$description = esc_html__( 'Percentage: apply an absolute percentage discount to all the products that match the conditions.', 'taxonomy-discounts-woocommerce' );
+				break;
+			case 'x-for-y':
+				$description = esc_html__( 'Buy x get y free (BOGO): offer y items when x (of the same product that match the conditions) are bought.', 'taxonomy-discounts-woocommerce' );
+				break;
+			default:
+				$description = apply_filters( 'tdw_non_default_rule_type_description', '', $type );
+				break;
+		}
+		if ( $strip_tags ) {
+			$description = wp_strip_all_tags( $description );
+		}
+		return $description;
+	}
+
+	/**
 	 * Get all discount rules from the database
 	 *
 	 * Retrieves and caches discount rules, with optional filtering for frontend display
@@ -1937,7 +1962,7 @@ class WC_Taxonomy_Discounts_Webdados {
 						<!-- Discount configuration -->
 						<div id="tdw-form-add-div-2" class="tdw-hidden">
 							<p id="tdw-form-add-choose-role" class="tdw-float-left">
-								<label for="tdw-form-add-type"><strong><?php esc_html_e( 'User role', 'taxonomy-discounts-woocommerce' ); ?></strong>:</label>
+								<label for="tdw-form-add-role"><strong><?php esc_html_e( 'User role', 'taxonomy-discounts-woocommerce' ); ?></strong>:</label>
 								<br>
 								<?php self::wp_dropdown_roles( 'add', '' ); ?>
 							</p>
@@ -1955,6 +1980,25 @@ class WC_Taxonomy_Discounts_Webdados {
 									}
 									?>
 								</select>
+								<?php
+								foreach ( $this->discount_types as $discount_type ) {
+									$description = self::get_rule_type_description( $discount_type, true );
+									if ( trim( $description ) === '' ) {
+										continue;
+									}
+									?>
+									<span id="tdw-form-add-choose-type-description-<?php echo esc_attr( $discount_type ); ?>" class="tdw-hidden tdw-hide-empty-type">
+										<?php
+										echo wp_kses_post(
+											wc_help_tip(
+												$description
+											)
+										);
+										?>
+									</span>
+									<?php
+								}
+								?>
 							</p>
 							<p id="tdw-form-add-choose-type-percentage" class="tdw-float-left tdw-hidden tdw-hide-empty-type">
 								<label><strong><?php esc_html_e( 'Min. Qtt.', 'taxonomy-discounts-woocommerce' ); ?> / <?php esc_html_e( 'Discount', 'taxonomy-discounts-woocommerce' ); ?> / <?php esc_html_e( 'Aggregate variations', 'taxonomy-discounts-woocommerce' ); ?></strong>:</label>
@@ -2028,7 +2072,7 @@ class WC_Taxonomy_Discounts_Webdados {
 						<!-- Active settings -->
 						<div id="tdw-form-add-div-4" class="tdw-hidden">
 							<p id="tdw-form-add-choose-active" class="tdw-float-left">
-								<label for="tdw-form-add-priority"><strong><?php esc_html_e( 'Active', 'taxonomy-discounts-woocommerce' ); ?></strong>:</label>
+								<label for="tdw-form-add-active"><strong><?php esc_html_e( 'Active', 'taxonomy-discounts-woocommerce' ); ?></strong>:</label>
 								<br>
 								<select id="tdw-form-add-active" name="tdw-form-add-active">
 									<option value="1"><?php esc_html_e( 'Yes', 'taxonomy-discounts-woocommerce' ); ?></option>
