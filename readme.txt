@@ -147,7 +147,7 @@ There’s a support tab at the top of this page, where you can ask the community
 If you reach us by email or any other direct contact method, we’ll assume you need premium, paid-for support.
 
 = Can I contribute to this plugin? =
-Yes, on the [GitHub repository](https://github.com/webdados/Taxonomy-Term-and-Role-based-Discounts-for-WooCommerce).
+Yes, on the [GitHub repository](https://github.com/Naked-Cat-Plugins/Taxonomy-Term-and-Role-based-Discounts-for-WooCommerce).
 
 = Can I contribute with a translation? =
 
@@ -166,6 +166,9 @@ You can report any security bugs found in the source code of this plugin through
 5. Show discount information, including dates on the product page (available with the PRO add-on)
 
 == Changelog ==
+
+= TBA = 
+* [NEW] Free plugin ownership transferred from [Marco Almeida | Webdados](https://profiles.wordpress.org/webdados/) to [Naked Cat Plugins](https://profiles.wordpress.org/nakedcatplugins/) on WordPress.org - No worries, we’re the same people :-)
 
 = 8.2 - 2026-04-03 =
 * [TWEAK] Improve readme.txt
