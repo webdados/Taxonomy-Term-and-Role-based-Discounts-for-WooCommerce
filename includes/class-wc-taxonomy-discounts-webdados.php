@@ -785,22 +785,6 @@ class WC_Taxonomy_Discounts_Webdados {
 			global $woocommerce_loop;
 			$on_woocommerce_loop = $woocommerce_loop && $woocommerce_loop['name'] !== '';
 			*/
-			/*if ( current_user_can( 'manage_options' ) ) {
-				var_dump(
-					is_product(),
-					is_shop(),
-					is_product_category(),
-					is_product_tag(),
-					is_product_taxonomy(),
-					$force_calculation,
-					$composite_ajax,
-					( isset( $GLOBALS['woocommerce_loop'] ) && isset( $GLOBALS['woocommerce_loop']['name'] ) && $GLOBALS['woocommerce_loop']['name'] === 'product' && isset( $GLOBALS['woocommerce_loop']['is_shortcode'] ) && $GLOBALS['woocommerce_loop']['is_shortcode'] === true ),
-					( isset( $GLOBALS['woocommerce_loop'] ) && isset( $GLOBALS['woocommerce_loop']['name'] ) && $GLOBALS['woocommerce_loop']['name'] === 'products' ),
-					apply_filters( 'tdw_custom_product_loop', false ),
-					$GLOBALS['woocommerce_loop']
-				);
-			}*/
-
 			if (
 				is_product() // Product page
 				||

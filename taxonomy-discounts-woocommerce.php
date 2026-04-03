@@ -2,7 +2,7 @@
 /**
  * Plugin Name:          Taxonomy/Term and Role-based Discounts for WooCommerce
  * Description:          Automatically apply WooCommerce discounts/pricing rules based on product category, tag, attribute, custom taxonomy, and user role — no coupons needed
- * Version:              8.1
+ * Version:              8.2
  * Author:               Naked Cat Plugins (by Webdados)
  * Author URI:           https://nakedcatplugins.com
  * Text Domain:          taxonomy-discounts-woocommerce
@@ -10,7 +10,7 @@
  * Tested up to:         7.0
  * Requires PHP:         7.2
  * WC requires at least: 7.1
- * WC tested up to:      10.6
+ * WC tested up to:      10.7
  * Requires Plugins:     woocommerce
  * License:              GPLv3
  */

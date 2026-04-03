@@ -5,7 +5,7 @@ Tags: discount, bulk discount, category discount, role-based pricing, woocommerc
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 8.1
+Stable tag: 8.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -166,6 +166,10 @@ You can report any security bugs found in the source code of this plugin through
 5. Show discount information, including dates on the product page (available with the PRO add-on)
 
 == Changelog ==
+
+= 8.2 - 2026-04-03 =
+* [TWEAK] Improve readme.txt
+* [DEV] Tested up to WordPress 7.0-RC2-62197 and WooCommerce 10.7.0-beta.1
 
 = 8.1 - 2026-03-24 =
 * [NEW] [PRO add-on](https://nakedcatplugins.com/product/taxonomy-term-and-role-based-discounts-for-woocommerce-pro-add-on/?utm_source=wordpress.org&utm_medium=link&utm_campaign=taxonomydiscounts_woocommerce_plugin) 6.2: Add discount to multiple terms at the same time
