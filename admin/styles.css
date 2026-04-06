@@ -11,10 +11,10 @@
 	margin-right: 0.75em;
 }
 #tdw-form-add input[type=number] {
-	width: 60px;
+	width: 80px;
 }
 #tdw-form-edit input[type=number] {
-	width: 50px;
+	width: 65px;
 }
 .tdw-date-field,
 #tdw-form-advanced-id {

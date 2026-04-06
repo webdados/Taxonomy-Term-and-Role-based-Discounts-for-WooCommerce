@@ -281,7 +281,7 @@ jQuery( document ).ready(
 							}
 							break;
 					}
-					if (go) {
+					if ( go ) {
 						$( '#tdw-form-edit' ).addClass( 'tdw-ajax-loading' );
 						$.post(
 							ajaxurl,

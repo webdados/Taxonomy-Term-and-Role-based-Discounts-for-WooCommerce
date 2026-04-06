@@ -1424,7 +1424,7 @@ class WC_Taxonomy_Discounts_Webdados {
 							if ( self::valid_rule_user_role( $rule ) && self::valid_rule_date( $rule ) && isset( $rule['type'] ) && $this->has_term( $term_id, $rule['taxonomy'], $product_id ) ) {
 								switch ( $rule['type'] ) {
 									case 'percentage':
-										if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && $rule['value'] > 0 ) {
+										if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && floatval( $rule['value'] ) > 0 ) {
 											if ( floatval( $rule['min-qtt'] ) === (float) 0 || floatval( $rule['min-qtt'] ) === (float) 1 ) {
 												$sale_price   = $variation_price - ( $variation_price * ( floatval( $rule['value'] ) / 100 ) );
 												$applied_rule = $rule;
@@ -1681,7 +1681,7 @@ class WC_Taxonomy_Discounts_Webdados {
 					ob_start();
 					switch ( $rule['type'] ) {
 						case 'percentage':
-							if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && $rule['value'] > 0 ) {
+							if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && floatval( $rule['value'] ) > 0 ) {
 								$found = true;
 								if ( floatval( $rule['min-qtt'] ) === (float) 0 || floatval( $rule['min-qtt'] ) === (float) 1 ) {
 									/* translators: %d: Discount percentage */
@@ -1694,7 +1694,7 @@ class WC_Taxonomy_Discounts_Webdados {
 												$location,
 												$rule
 											),
-											intval( $rule['value'] )
+											wctd_format_percentage( $rule['value'] )
 										)
 									);
 								} else {
@@ -1708,7 +1708,7 @@ class WC_Taxonomy_Discounts_Webdados {
 												$rule
 											),
 											floatval( $rule['min-qtt'] ),
-											intval( $rule['value'] )
+											wctd_format_percentage( $rule['value'] )
 										)
 									);
 								}
@@ -1794,14 +1794,14 @@ class WC_Taxonomy_Discounts_Webdados {
 		if ( ( ! empty( $rule ) ) && apply_filters( 'tdw_perc_sale_badge_' . $product->get_id(), true ) ) {
 			switch ( $rule['type'] ) {
 				case 'percentage':
-					if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && $rule['value'] > 0 ) {
+					if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && floatval( $rule['value'] ) > 0 ) {
 						$found = true;
 						if ( floatval( $rule['min-qtt'] ) === (float) 0 || floatval( $rule['min-qtt'] ) === (float) 1 ) {
-							$new_html = sprintf( '-%d%%', intval( $rule['value'] ) );
+							$new_html = sprintf( '-%s%%', wctd_format_percentage( $rule['value'] ) );
 						}
 						// We need to keep it short
 						// else {
-						// $new_html = sprintf( __( 'From <strong>%d</strong> bought, <strong>%d%%</strong> discount', 'taxonomy-discounts-woocommerce' ), floatval( $rule['min-qtt'] ), intval( $rule['value'] ) );
+						// $new_html = sprintf( __( 'From <strong>%d</strong> bought, <strong>%s%%</strong> discount', 'taxonomy-discounts-woocommerce' ), floatval( $rule['min-qtt'] ), wctd_format_percentage( $rule['value'] ) );
 						// }
 					}
 					break;
@@ -2030,7 +2030,7 @@ class WC_Taxonomy_Discounts_Webdados {
 								<br>
 								<span><input type="number" id="tdw-form-add-percentage-min-qtt" name="tdw-form-add-percentage-min-qtt" min="0" step="1" placeholder="0"></span>
 								/
-								<span><input type="number" id="tdw-form-add-percentage-value" name="tdw-form-add-percentage-value" min="1" max="99" step="1" placeholder="0" class="required">%</span>
+								<span><input type="number" id="tdw-form-add-percentage-value" name="tdw-form-add-percentage-value" min="0.01" max="99.99" step="0.01" placeholder="0" class="required">%</span>
 								/
 								<span>
 									<select id="tdw-form-add-percentage-aggr-var" name="tdw-form-add-percentage-aggr-var">
@@ -2321,7 +2321,7 @@ class WC_Taxonomy_Discounts_Webdados {
 																/* translators: %1$d: Minimum quantity, %2$d: Rule percentage */
 																__( 'From %1$s bought, %2$s%% discount', 'taxonomy-discounts-woocommerce' ),
 																'<strong>' . floatval( $rule['min-qtt'] ) . '</strong>',
-																'<strong>' . intval( $rule['value'] ) . '</strong>'
+																'<strong>' . wctd_format_percentage( $rule['value'] ) . '</strong>'
 															)
 														);
 													} else {
@@ -2329,7 +2329,7 @@ class WC_Taxonomy_Discounts_Webdados {
 															sprintf(
 																/* translators: %s: Discount percentage */
 																__( '%s%% discount', 'taxonomy-discounts-woocommerce' ),
-																'<strong>' . intval( $rule['value'] ) . '</strong>'
+																'<strong>' . wctd_format_percentage( $rule['value'] ) . '</strong>'
 															)
 														);
 													}
@@ -2398,7 +2398,7 @@ class WC_Taxonomy_Discounts_Webdados {
 												?>
 												<span title="<?php echo esc_attr__( 'Min. Qtt.', 'taxonomy-discounts-woocommerce' ); ?>"><input type="number" id="tdw-form-edit-percentage-min-qtt-<?php echo esc_html( isset( $rule['meta_id_prefix'] ) ? $rule['meta_id_prefix'] : '' ); ?><?php echo intval( $rule['meta_id'] ); ?>" name="tdw-form-edit-percentage-min-qtt" min="0" step="1" placeholder="0" value="<?php echo intval( $rule['min-qtt'] ); ?>"></span>
 												/
-												<span title="<?php echo esc_attr__( 'Discount', 'taxonomy-discounts-woocommerce' ); ?>"><input type="number" id="tdw-form-edit-percentage-value-<?php echo esc_html( isset( $rule['meta_id_prefix'] ) ? $rule['meta_id_prefix'] : '' ); ?><?php echo intval( $rule['meta_id'] ); ?>" name="tdw-form-edit-percentage-value" min="1" max="99" step="1" placeholder="0" value="<?php echo intval( $rule['value'] ); ?>" class="required">%</span>
+												<span title="<?php echo esc_attr__( 'Discount', 'taxonomy-discounts-woocommerce' ); ?>"><input type="number" id="tdw-form-edit-percentage-value-<?php echo esc_html( isset( $rule['meta_id_prefix'] ) ? $rule['meta_id_prefix'] : '' ); ?><?php echo intval( $rule['meta_id'] ); ?>" name="tdw-form-edit-percentage-value" min="0.01" max="99.99" step="0.01" placeholder="0.01" value="<?php echo floatval( $rule['value'] ); ?>" class="required">%</span>
 												/
 												<span>
 													<select id="tdw-form-add-percentage-aggr-var" name="tdw-form-add-percentage-aggr-var">
@@ -2559,7 +2559,7 @@ class WC_Taxonomy_Discounts_Webdados {
 					case 'percentage':
 						if ( isset( $_POST['tdw-form-add-percentage-value'] ) && intval( $_POST['tdw-form-add-percentage-value'] ) >= 1 && intval( $_POST['tdw-form-add-percentage-value'] ) <= 99 ) {
 							$data['min-qtt']  = isset( $_POST['tdw-form-add-percentage-min-qtt'] ) ? floatval( $_POST['tdw-form-add-percentage-min-qtt'] ) : 0;
-							$data['value']    = isset( $_POST['tdw-form-add-percentage-value'] ) ? intval( $_POST['tdw-form-add-percentage-value'] ) : 0;
+							$data['value']    = isset( $_POST['tdw-form-add-percentage-value'] ) ? floatval( $_POST['tdw-form-add-percentage-value'] ) : 0;
 							$data['aggr-var'] = ( isset( $_POST['tdw-form-add-percentage-aggr-var'] ) && intval( $_POST['tdw-form-add-percentage-aggr-var'] ) === 1 ? true : false );
 						}
 						break;
@@ -2655,7 +2655,7 @@ class WC_Taxonomy_Discounts_Webdados {
 			$type = isset( $_POST['tdw-form-edit-type'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['tdw-form-edit-type'] ) ) ) : '';
 			switch ( $type ) {
 				case 'percentage':
-					$percentage_value = isset( $_POST['tdw-form-edit-percentage-value'] ) ? intval( $_POST['tdw-form-edit-percentage-value'] ) : 0;
+					$percentage_value = isset( $_POST['tdw-form-edit-percentage-value'] ) ? round( floatval( $_POST['tdw-form-edit-percentage-value'] ), 2 ) : 0;
 					if ( $percentage_value >= 1 && $percentage_value <= 99 ) {
 						$percentage_min_qtt = isset( $_POST['tdw-form-edit-percentage-min-qtt'] ) ? floatval( $_POST['tdw-form-edit-percentage-min-qtt'] ) : 0;
 						$data['min-qtt']    = $percentage_min_qtt;

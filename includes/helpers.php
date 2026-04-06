@@ -78,3 +78,13 @@ function wctd_get_product_current_price( $product, $qty = 1, $force_tax = '' ) {
 function wctd_get_product_applied_rule( $product ) {
 	return WC_Taxonomy_Discounts_Webdados()->get_product_applied_rule( $product );
 }
+
+/**
+ * Helper - Format percentage value, with or without decimals, depending on the value itself.
+ *
+ * @param mixed $value The value to format.
+ */
+function wctd_format_percentage( $value ) {
+	$float = floatval( $value );
+	return ( $float == intval( $float ) ) ? number_format( $float, 0 ) : wc_format_decimal( $float, 2 );
+}
