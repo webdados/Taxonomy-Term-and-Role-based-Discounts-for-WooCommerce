@@ -86,5 +86,6 @@ function wctd_get_product_applied_rule( $product ) {
  */
 function wctd_format_percentage( $value ) {
 	$float = floatval( $value );
-	return ( $float == intval( $float ) ) ? number_format( $float, 0 ) : wc_format_decimal( $float, 2 );
+	// We use == instead of === because we want to allow "10.0" to be considered as an integer value, for example
+	return ( $float == intval( $float ) ) ? number_format( $float, 0 ) : wc_format_decimal( $float, 2 ); // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 }

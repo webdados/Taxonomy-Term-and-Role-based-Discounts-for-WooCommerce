@@ -36,13 +36,15 @@ input[name=tdw-form-edit-advanced-id] {
 }
 #tdw-form-edit input {
 	padding: 0 4px;
-	min-height: 22px;
+	/* min-height: 22px; */ /* Removed because of WP 7.0 */
+	margin-bottom: 2px;
 }
 #tdw-form-edit input[type=checkbox] {
 	min-height: auto;
 }
 #tdw-form-edit select {
-	min-height: 22px;
+	/* min-height: 22px; */ /* Removed because of WP 7.0 */
+	margin-bottom: 2px;
 }
 #tdw-form-edit input.button-primary {
 	padding: 0 8px;

@@ -5,7 +5,7 @@ Tags: discount, bulk discount, category discount, role-based pricing, woocommerc
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 8.2
+Stable tag: 8.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -167,7 +167,8 @@ You can report any security bugs found in the source code of this plugin through
 
 == Changelog ==
 
-= TBA =
+= 8.3 - 2026-04-06 =
+* [NEW] Allow decimal values on the percentage discount, for example 10.25% discount
 * [NEW] Free plugin ownership transferred from [Marco Almeida | Webdados](https://profiles.wordpress.org/webdados/) to [Naked Cat Plugins](https://profiles.wordpress.org/nakedcatplugins/) on WordPress.org - No worries, we’re the same people :-)
 * [DEV] New `tdw_discount_information_display` and `tdw_perc_sale_badge_replace` filters to allow preventing showing discount information and replacing sales badge with percentage
 * [DEV] New `tdw_product_is_on_sale` filter to allow overriding the “on sale” status set by this plugin
