@@ -1689,8 +1689,8 @@ class WC_Taxonomy_Discounts_Webdados {
 										sprintf(
 											apply_filters(
 												'tdw_text_x_discount',
-												/* translators: %d: Rule percentage */
-												__( '<span class="tdw_discount_information_percentage">%d%%</span> discount', 'taxonomy-discounts-woocommerce' ),
+												/* translators: %s: Rule percentage */
+												__( '<span class="tdw_discount_information_percentage">%s%%</span> discount', 'taxonomy-discounts-woocommerce' ),
 												$location,
 												$rule
 											),
@@ -1702,8 +1702,8 @@ class WC_Taxonomy_Discounts_Webdados {
 										sprintf(
 											apply_filters(
 												'tdw_text_from_x_bought_y_discount',
-												/* translators: %1$d: Minimum quantity, %2$d: Rule percentage */
-												__( 'From <span class="tdw_discount_information_min_qty">%1$d</span> bought, <span class="tdw_discount_information_percentage">%2$d%%</span> discount', 'taxonomy-discounts-woocommerce' ),
+												/* translators: %1$d: Minimum quantity, %2$s: Rule percentage */
+												__( 'From <span class="tdw_discount_information_min_qty">%1$d</span> bought, <span class="tdw_discount_information_percentage">%2$s%%</span> discount', 'taxonomy-discounts-woocommerce' ),
 												$location,
 												$rule
 											),
