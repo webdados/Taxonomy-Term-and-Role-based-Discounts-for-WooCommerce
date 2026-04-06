@@ -1569,6 +1569,7 @@ class WC_Taxonomy_Discounts_Webdados {
 		if ( $this->debug ) {
 			do_action( 'qm/start', 'WC_Taxonomy_Discounts_Webdados::on_get_product_is_on_sale - ' . $product->get_id() );
 		}
+		$originally_on_sale = $is_on_sale;
 		// Cached?
 		if ( $this->enable_cache && isset( $this->cache_on_sale[ $product->get_id() ] ) ) {
 			if ( $this->debug ) {
@@ -1641,7 +1642,7 @@ class WC_Taxonomy_Discounts_Webdados {
 		if ( $this->debug ) {
 			do_action( 'qm/stop', 'WC_Taxonomy_Discounts_Webdados::on_get_product_is_on_sale - ' . $product->get_id() );
 		}
-		return $is_on_sale;
+		return apply_filters( 'tdw_product_is_on_sale', $is_on_sale, $product, $originally_on_sale );
 	}
 
 	/**
@@ -1676,87 +1677,89 @@ class WC_Taxonomy_Discounts_Webdados {
 		if ( count( $discount_rules ) ) {
 			$rule = self::get_product_applied_rule( $product );
 			if ( ! empty( $rule ) ) {
-				ob_start();
-				switch ( $rule['type'] ) {
-					case 'percentage':
-						if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && $rule['value'] > 0 ) {
-							$found = true;
-							if ( floatval( $rule['min-qtt'] ) === (float) 0 || floatval( $rule['min-qtt'] ) === (float) 1 ) {
-								/* translators: %d: Discount percentage */
+				if ( apply_filters( 'tdw_discount_information_display', true, $product, $rule, $location ) ) {
+					ob_start();
+					switch ( $rule['type'] ) {
+						case 'percentage':
+							if ( isset( $rule['value'] ) && is_numeric( $rule['value'] ) && $rule['value'] > 0 ) {
+								$found = true;
+								if ( floatval( $rule['min-qtt'] ) === (float) 0 || floatval( $rule['min-qtt'] ) === (float) 1 ) {
+									/* translators: %d: Discount percentage */
+									$info = wp_kses_post(
+										sprintf(
+											apply_filters(
+												'tdw_text_x_discount',
+												/* translators: %d: Rule percentage */
+												__( '<span class="tdw_discount_information_percentage">%d%%</span> discount', 'taxonomy-discounts-woocommerce' ),
+												$location,
+												$rule
+											),
+											intval( $rule['value'] )
+										)
+									);
+								} else {
+									$info = wp_kses_post(
+										sprintf(
+											apply_filters(
+												'tdw_text_from_x_bought_y_discount',
+												/* translators: %1$d: Minimum quantity, %2$d: Rule percentage */
+												__( 'From <span class="tdw_discount_information_min_qty">%1$d</span> bought, <span class="tdw_discount_information_percentage">%2$d%%</span> discount', 'taxonomy-discounts-woocommerce' ),
+												$location,
+												$rule
+											),
+											floatval( $rule['min-qtt'] ),
+											intval( $rule['value'] )
+										)
+									);
+								}
+							}
+							break;
+						case 'x-for-y':
+							if ( isset( $rule['x'] ) && is_numeric( $rule['x'] ) && floatval( $rule['x'] ) > 0 && isset( $rule['y'] ) && is_numeric( $rule['y'] ) && floatval( $rule['y'] ) > 0 && floatval( $rule['x'] ) > floatval( $rule['y'] ) ) {
+								$found = true;
+								/* translators: 1: Quantity bought 2: Quantity free */
 								$info = wp_kses_post(
 									sprintf(
 										apply_filters(
-											'tdw_text_x_discount',
-											/* translators: %d: Rule percentage */
-											__( '<span class="tdw_discount_information_percentage">%d%%</span> discount', 'taxonomy-discounts-woocommerce' ),
+											'tdw_text_for_each_x_bought_y_free',
+											/* translators: %1$s: Quantity bought, %2$s: Quantity free */
+											__( 'For each <span class="tdw_discount_information_qty_bought">%1$s</span> bought <span class="tdw_discount_information_qty_free">%2$s</span> is free', 'taxonomy-discounts-woocommerce' ),
 											$location,
 											$rule
 										),
-										intval( $rule['value'] )
-									)
-								);
-							} else {
-								$info = wp_kses_post(
-									sprintf(
-										apply_filters(
-											'tdw_text_from_x_bought_y_discount',
-											/* translators: %1$d: Minimum quantity, %2$d: Rule percentage */
-											__( 'From <span class="tdw_discount_information_min_qty">%1$d</span> bought, <span class="tdw_discount_information_percentage">%2$d%%</span> discount', 'taxonomy-discounts-woocommerce' ),
-											$location,
-											$rule
-										),
-										floatval( $rule['min-qtt'] ),
-										intval( $rule['value'] )
+										$rule['x'],
+										$rule['y']
 									)
 								);
 							}
-						}
-						break;
-					case 'x-for-y':
-						if ( isset( $rule['x'] ) && is_numeric( $rule['x'] ) && floatval( $rule['x'] ) > 0 && isset( $rule['y'] ) && is_numeric( $rule['y'] ) && floatval( $rule['y'] ) > 0 && floatval( $rule['x'] ) > floatval( $rule['y'] ) ) {
-							$found = true;
-							/* translators: 1: Quantity bought 2: Quantity free */
-							$info = wp_kses_post(
-								sprintf(
-									apply_filters(
-										'tdw_text_for_each_x_bought_y_free',
-										/* translators: %1$s: Quantity bought, %2$s: Quantity free */
-										__( 'For each <span class="tdw_discount_information_qty_bought">%1$s</span> bought <span class="tdw_discount_information_qty_free">%2$s</span> is free', 'taxonomy-discounts-woocommerce' ),
-										$location,
-										$rule
-									),
-									$rule['x'],
-									$rule['y']
-								)
-							);
-						}
-						break;
-					default:
-						// Non default rule types - Allow PRO or custom code to set the information text through filters
-						$info = apply_filters( 'tdw_discount_information_non_default_rule', '', $product, $rule, $location );
-						break;
-				}
-				if ( trim( $info ) !== '' ) {
-					?>
-					<div class="wctd_discount_information"><?php echo wp_kses_post( $info ); ?></div>
-					<?php
-				}
-				// Echo passing through filters
-				echo wp_kses_post(
-					apply_filters(
-						'tdw_discount_information_' . $product->get_id(),
+							break;
+						default:
+							// Non default rule types - Allow PRO or custom code to set the information text through filters
+							$info = apply_filters( 'tdw_discount_information_non_default_rule', '', $product, $rule, $location );
+							break;
+					}
+					if ( trim( $info ) !== '' ) {
+						?>
+						<div class="wctd_discount_information"><?php echo wp_kses_post( $info ); ?></div>
+						<?php
+					}
+					// Echo passing through filters
+					echo wp_kses_post(
 						apply_filters(
-							'tdw_discount_information',
-							ob_get_clean(),
+							'tdw_discount_information_' . $product->get_id(),
+							apply_filters(
+								'tdw_discount_information',
+								ob_get_clean(),
+								$product,
+								$rule,
+								$location
+							),
 							$product,
 							$rule,
 							$location
-						),
-						$product,
-						$rule,
-						$location
-					)
-				);
+						)
+					);
+				}
 			}
 		}
 		// No rule found - Try to add to non-taxonomy discounts
@@ -1813,16 +1816,18 @@ class WC_Taxonomy_Discounts_Webdados {
 					// PRO integration - Done with the tdw_perc_sale_badge_html filter below
 					break;
 			}
-		}
-		$new_html = apply_filters( 'tdw_perc_sale_badge_html', $new_html, $product, $rule );
-		if ( $new_html ) {
-			if ( $only_text ) {
-				$html = $new_html;
-			} elseif ( $this->flatsome_active ) {
-				$search = '/(<span class="onsale">).*?(<\/span>)/';
-				$html   = preg_replace( $search, '<span class="onsale">' . $new_html . '</span>', $html );
-			} else {
-				$html = '<span class="onsale">' . $new_html . '</span>';
+			$new_html = apply_filters( 'tdw_perc_sale_badge_html', $new_html, $product, $rule );
+			if ( $new_html ) {
+				if ( apply_filters( 'tdw_perc_sale_badge_replace', true, $product, $rule, $new_html ) ) {
+					if ( $only_text ) {
+						$html = $new_html;
+					} elseif ( $this->flatsome_active ) {
+						$search = '/(<span class="onsale">).*?(<\/span>)/';
+						$html   = preg_replace( $search, '<span class="onsale">' . $new_html . '</span>', $html );
+					} else {
+						$html = '<span class="onsale">' . $new_html . '</span>';
+					}
+				}
 			}
 		}
 		return $html;

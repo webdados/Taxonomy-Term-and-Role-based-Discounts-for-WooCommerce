@@ -167,8 +167,10 @@ You can report any security bugs found in the source code of this plugin through
 
 == Changelog ==
 
-= TBA = 
+= TBA =
 * [NEW] Free plugin ownership transferred from [Marco Almeida | Webdados](https://profiles.wordpress.org/webdados/) to [Naked Cat Plugins](https://profiles.wordpress.org/nakedcatplugins/) on WordPress.org - No worries, we’re the same people :-)
+* [DEV] New `tdw_discount_information_display` and `tdw_perc_sale_badge_replace` filters to allow preventing showing discount information and replacing sales badge with percentage
+* [DEV] New `tdw_product_is_on_sale` filter to allow overriding the “on sale” status set by this plugin
 
 = 8.2 - 2026-04-03 =
 * [TWEAK] Improve readme.txt
