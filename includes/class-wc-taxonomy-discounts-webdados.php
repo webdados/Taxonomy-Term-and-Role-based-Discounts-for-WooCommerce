@@ -99,7 +99,7 @@ class WC_Taxonomy_Discounts_Webdados {
 			add_action( 'wp_ajax_tdw_delete_rule', array( &$this, 'ajax_delete_rule' ) );
 
 		}
-		add_action( 'plugins_loaded', array( &$this, 'init_public_filters' ) );
+		add_action( 'setup_theme', array( &$this, 'init_public_filters' ) );
 	}
 
 	/**
