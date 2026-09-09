@@ -9,6 +9,9 @@ __MACOSX
 .github
 .wordpress-org/*
 .wordpress-org
+.claude/*
+.claude
+CLAUDE.md
 .svn/*
 .svn
 .distignore
