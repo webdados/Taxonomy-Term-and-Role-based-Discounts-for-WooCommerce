@@ -51,3 +51,7 @@ Thumbs.db
 # Project specific ignores
 _todo.txt
 createzip.command
+
+# Local editor context, not part of the plugin
+CLAUDE.md
+.claude/
