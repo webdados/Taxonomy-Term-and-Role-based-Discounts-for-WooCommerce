@@ -97,6 +97,13 @@ class WC_Taxonomy_Discounts_Webdados {
 			add_action( 'wp_ajax_tdw_form_edit_submit', array( &$this, 'ajax_form_edit_submit' ) );
 			add_action( 'wp_ajax_tdw_rules_table', array( &$this, 'admin_page_rules_table_ajax' ) );
 			add_action( 'wp_ajax_tdw_delete_rule', array( &$this, 'ajax_delete_rule' ) );
+			// Rules whose discount type nothing installed can handle, see is_rule_type_handled().
+			// Show them as not active, say why, and keep them out of the edit and delete paths.
+			add_filter( 'tdw_admin_rule_active_display', array( &$this, 'unhandled_rule_type_active_display' ), 10, 2 );
+			add_filter( 'tdw_rule_editable', array( &$this, 'unhandled_rule_type_editable_deletable_gate' ), 10, 2 );
+			add_filter( 'tdw_rule_deletable', array( &$this, 'unhandled_rule_type_editable_deletable_gate' ), 10, 2 );
+			add_filter( 'tdw_rule_not_editable_or_deletable_notice', array( &$this, 'unhandled_rule_type_not_editable_or_deletable_notice' ), 10, 2 );
+			add_filter( 'tdw_non_default_rule_type_name', array( &$this, 'unhandled_rule_type_name' ), 10, 2 );
 
 		}
 		add_action( 'setup_theme', array( &$this, 'init_public_filters' ) );
@@ -707,6 +714,117 @@ class WC_Taxonomy_Discounts_Webdados {
 	}
 
 	/**
+	 * Can anything currently active actually price a rule of this type?
+	 *
+	 * Types are registered through the tdw_discount_types filter, so a rule can be stored with a
+	 * type that nothing answers to any more: a PRO type with the PRO add-on deactivated or
+	 * uninstalled, or on an expired license, since PRO only registers its types once the license
+	 * validates. Those rules are dead weight, they can never produce a price, and treating them as
+	 * if they were ours means they win the priority loop and hide the valid rule underneath.
+	 *
+	 * If the types have not been registered yet (the filter runs on after_setup_theme) every type
+	 * is treated as handled, which is what happened before this check existed. Failing that way
+	 * round leaves discounts working; the opposite would silently switch all of them off.
+	 *
+	 * @param string $type The rule type.
+	 * @return boolean
+	 */
+	public function is_rule_type_handled( $type ) {
+		if ( ! is_array( $this->discount_types ) || 0 === count( $this->discount_types ) ) {
+			return true;
+		}
+		return in_array( $type, $this->discount_types, true );
+	}
+
+	/**
+	 * Is this a stored rule that nothing installed can handle?
+	 *
+	 * @param array $rule The rule.
+	 * @return boolean
+	 */
+	private function is_unhandled_rule( $rule ) {
+		return is_array( $rule ) && isset( $rule['type'] ) && ! $this->is_rule_type_handled( $rule['type'] );
+	}
+
+	/**
+	 * Show a rule nothing can handle as not active on the rules table
+	 *
+	 * It is still stored as active, and will start working again the moment whatever provides its
+	 * type comes back, so only the display changes.
+	 *
+	 * @param bool  $active Whether the rule is shown as active.
+	 * @param array $rule   The rule.
+	 * @return bool
+	 */
+	public function unhandled_rule_type_active_display( $active, $rule ) {
+		if ( $this->is_unhandled_rule( $rule ) ) {
+			return false;
+		}
+		return $active;
+	}
+
+	/**
+	 * Keep a rule nothing can handle out of the edit and delete paths
+	 *
+	 * Editing is the dangerous one: the add/edit form only knows the types that are registered, so
+	 * saving such a rule would drop every setting belonging to its own type and quietly turn it into
+	 * something else. Deleting is blocked for the same reason the license expiry gate blocks it, the
+	 * row is meant to stay as a reminder to reactivate the add-on.
+	 *
+	 * @param bool  $allowed Whether the action is allowed.
+	 * @param array $rule    The rule.
+	 * @return bool
+	 */
+	public function unhandled_rule_type_editable_deletable_gate( $allowed, $rule ) {
+		if ( $this->is_unhandled_rule( $rule ) ) {
+			return false;
+		}
+		return $allowed;
+	}
+
+	/**
+	 * Explain, on the rules table, why a rule nothing can handle cannot be edited or deleted
+	 *
+	 * The line break is concatenated rather than left inside a translatable string, so a translation
+	 * cannot break the markup. The output is run through wp_kses_post() where it is echoed.
+	 *
+	 * @param string $notice The current notice.
+	 * @param array  $rule   The rule.
+	 * @return string
+	 */
+	public function unhandled_rule_type_not_editable_or_deletable_notice( $notice, $rule ) {
+		if ( $this->is_unhandled_rule( $rule ) ) {
+			return esc_html__( 'This rule is not being applied.', 'taxonomy-discounts-woocommerce' )
+				. '<br>'
+				. esc_html__( 'Its discount type probably needs the PRO add-on.', 'taxonomy-discounts-woocommerce' );
+		}
+		return $notice;
+	}
+
+	/**
+	 * Name a discount type nothing can handle, instead of the literal word "error"
+	 *
+	 * Runs before the PRO add-on's own callback on this filter, and only replaces the name when the
+	 * type is genuinely unregistered, so PRO still names its own types while it is active. The
+	 * stored type is shown because it is the one thing that tells the shop owner, or support,
+	 * whether this is a PRO rule or something that should never have been in the database. Why it is
+	 * not available is left to the notice on the row, which says it once and says it better.
+	 *
+	 * The stored type goes on the first line and the state underneath, so the cell reads the same way
+	 * as every other row in the column, where the type is named first and its detail follows.
+	 *
+	 * @param string $name The current name.
+	 * @param string $type The rule type.
+	 * @return string
+	 */
+	public function unhandled_rule_type_name( $name, $type ) {
+		if ( $this->is_rule_type_handled( $type ) ) {
+			return $name;
+		}
+		return esc_html( $type ) . '<br>' . esc_html__( 'Not available', 'taxonomy-discounts-woocommerce' );
+	}
+
+	/**
 	 * Get the applicable discount rule for a specific product
 	 *
 	 * Finds and returns the first matching discount rule for a product based on taxonomy terms, user role, and date validity
@@ -726,7 +844,7 @@ class WC_Taxonomy_Discounts_Webdados {
 				foreach ( $discount_rules as $priority => $terms ) {
 					foreach ( $terms as $term_id => $rules ) {
 						foreach ( $rules as $rule_key => $rule ) {
-							if ( WC_Taxonomy_Discounts_Webdados()->valid_rule_user_role( $rule ) && WC_Taxonomy_Discounts_Webdados()->valid_rule_date( $rule ) && isset( $rule['type'] ) ) {
+							if ( WC_Taxonomy_Discounts_Webdados()->valid_rule_user_role( $rule ) && WC_Taxonomy_Discounts_Webdados()->valid_rule_date( $rule ) && isset( $rule['type'] ) && $this->is_rule_type_handled( $rule['type'] ) ) {
 								if ( $this->has_term( $term_id, $rule['taxonomy'], $product_id ) ) {
 									return apply_filters( 'tdw_get_product_applied_rule', $rule, $product );
 								}
